@@ -47,17 +47,22 @@ private:
 	bool p2Collision = false;
 	MainWindow& wnd;
 	Graphics gfx;
-	std::mt19937 rng;
-	std::random_device rd;
 	std::uniform_int_distribution<int> Direction;
 	Board brd;
 	Player p1;
 	Player p2;
 	ball ball;
 	Sprites s;
-	bool Lost=false;
+	bool p1Lost=false;
+	bool p2Lost = false;
+	int p1score=0;
+	int p2score=0;
 	bool GameIsStarted = false;
 	bool GameIsOver = false;
+	bool RoundIsOver = false;
+	bool InScore = false;
+	int GIOcounter=0;
+	int counter = 0;
 	/********************************/
 	/*  User Variables              */
 	/********************************/

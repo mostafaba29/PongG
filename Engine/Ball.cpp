@@ -3,8 +3,8 @@ ball::ball()
 	:
 	x(400),
 	y(300),
-	vx(2),
-	vy(2)
+	vx(3),
+	vy(3)
 {
 }
 
@@ -29,18 +29,17 @@ void ball::Draw(Color c,Graphics& gfx)
 	}
 }*/
 
-void ball::IncreaseSpeed()
-{
-	vx++;
-	vy++;
-}
-
 void ball::ClambBoard()
 {
-	if ((x+10 > 749) || (x-10 < 51)) {
+	if (x+10 > 749) {
 		vx = 0;
 		vy = 0;
-		lost = true;
+		p1lost = true;
+	}
+	if (x -10 < 51) {
+		vx = 0;
+		vy = 0;
+		p2lost = true;
 	}
 	if ((y+10 > 549) || (y-10 < 51)) {
 		vy = -vy;
@@ -49,29 +48,13 @@ void ball::ClambBoard()
 
 void ball::Update(int Yp1, int Yp2,bool p1,bool p2,int r)
 {
-	if (p1 && (GetPosY() > Yp1 - 35) && (GetPosY() < Yp1 + 35)) {
-			/*if (r == 0) {
-				vx = -vx;
-				vy = -vy;
-			}
-			else if (r == 1) {
-				vx = -vx;
-				vy = vy;
-			}*/
+	if (p1 && (GetPosY() > Yp1 - 40) && (GetPosY() < Yp1 + 40)) {
 			vx = -vx;
-			vy = -vy;
+			vy = -vy*r;
 	}
-	else if (p2 && (GetPosY() > Yp2 - 35) && (GetPosY() < Yp2 + 35)) {
-			/*if (r == 0) {
-				vx = -vx;
-				vy = -vy;
-			}
-			else if (r == 1) {
-				vx = -vx;
-				vy = vy;
-			}*/
+	else if (p2 && (GetPosY() > Yp2 - 40) && (GetPosY() < Yp2 + 40)) {
 			vx = -vx;
-			vy = -vy;
+			vy = -vy*r; 
 	}
 	x += vx;
 	y += vy;
@@ -82,17 +65,32 @@ int ball::GetPosY()
 	return y;
 }
 
-bool ball::GetLost() const
+bool ball::GetLost1() const
 {
-	return lost;
+	return p1lost;
+}
+
+bool ball::GetLost2() const
+{
+	return p2lost;
 }
 
 bool ball::CheckCollision1(Player& p)
 {
-	return (x + 10) >= 730;
+	return (x + 10) >= 728;
 }
 
 bool ball::CheckCollision2(Player & p)
 {
-	return (x - 10) <= 71;
+	return (x - 10) <= 73;
+}
+
+void ball::reset()
+{
+	x = 400;
+	y = 300;
+	vx = 3;
+	vy = 3;
+	p1lost = false;
+	p2lost = false;
 }

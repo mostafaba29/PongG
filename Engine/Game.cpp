@@ -26,8 +26,7 @@ Game::Game(MainWindow& wnd)
 	wnd(wnd),
 	gfx(wnd),
 	brd(gfx),
-	rng(rd()),
-	Direction(0, 1)
+	Direction(-1, 1)
 {
 	//ball.Init();
 }
@@ -42,10 +41,30 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
+	std::random_device rd;
+	std::mt19937 rng(rd());
 	if (!GameIsStarted) {
 		if (wnd.kbd.KeyIsPressed(VK_RETURN)) { GameIsStarted = true; }
 	}
-	else if (GameIsStarted&&!GameIsOver) {
+	else if (RoundIsOver) {
+		if (!(InScore)) {
+			if (p1Lost)p2score++;
+			if (p2Lost)p1score++;
+			InScore = true;
+			if (p1score == 5 || p2score == 5)GameIsOver = true;
+		}
+		GIOcounter++;
+		if (GIOcounter >= 120) {
+			GIOcounter = 0;
+			ball.reset();
+			p1.reset();
+			p2.reset();
+			brd.Wcolor();
+			RoundIsOver = false;
+			InScore = false;
+		}
+	}
+	else if (GameIsStarted&&!GameIsOver&&!RoundIsOver) {
 		int p1y = p1.GetY();
 		int p2y = p2.GetY();
 		p1Collision = ball.CheckCollision1(p1);
@@ -64,9 +83,12 @@ void Game::UpdateModel()
 		if (wnd.kbd.KeyIsPressed('S')) {
 			p2.Move('d');
 		}
-		Lost = ball.GetLost();
+		p1Lost = ball.GetLost1();
+		p2Lost = ball.GetLost2();
+		if (p1Lost || p2Lost) RoundIsOver = true;
 	}
-
+	
+	//p1.ProgressBar(gfx, Colors::Green, 5, 50, 10);
 }
 
 void Game::ComposeFrame()
@@ -74,17 +96,19 @@ void Game::ComposeFrame()
 	if (!GameIsStarted) {
 		s.DrawPressEnter(gfx);
 	}
-	else if (GameIsStarted) {
+	else if (GameIsStarted&&!GameIsOver) {
 		p1.Draw(Colors::Green, gfx, 730);
 		p2.Draw(Colors::Blue, gfx, 51);
 		ball.Draw(Colors::White, gfx);
-		if (Lost) {
+		p1.ProgressBar(gfx, Colors::Blue, p2score, 50, 10);
+		p2.ProgressBar(gfx, Colors::Green, p1score, 718, 10);
+		if (RoundIsOver) {
 			brd.ChangeColor();
-			GameIsOver = true;
 		}
 		brd.DrawBorder(50, 50, gfx);
 	}
-	else if(GameIsOver){
-		s.DrawGameOver2(gfx);
+	else if (GameIsOver) {
+		s.DrawGameOver(gfx);
 	}
+	
 }

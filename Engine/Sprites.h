@@ -3,8 +3,7 @@
 class Sprites {
 public:
 	void DrawPressEnter(Graphics& gfx);
-	void DrawGameOver(Graphics& gfx);
-	void DrawGameOver2(Graphics& gfx);
+	void DrawGameOver( Graphics& gfx);
 private:
 	int x=300;
 	int y=300;

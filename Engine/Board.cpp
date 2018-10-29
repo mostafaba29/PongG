@@ -26,6 +26,11 @@ void Board::ChangeColor()
 	c = Colors::Red;
 }
 
+void Board::Wcolor()
+{
+	c = Colors::White;
+}
+
 /*bool Board::IsInside(const Location & loc) const
 {
 	return (loc.x >= 50) && (loc.x < GetWidth()) && (loc.y >= 20) && (loc.y<GetHeight());

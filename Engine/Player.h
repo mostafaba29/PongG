@@ -6,6 +6,8 @@ public:
 	void Move(char c);
 	int GetY();
 	int GetX();
+	void ProgressBar(Graphics&gfx,Color c,int i, int xp, int yp);
+	void reset();
 private:
 	int x;
 	int y=270;

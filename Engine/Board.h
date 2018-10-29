@@ -7,6 +7,7 @@ public:
 	const int GetWidth()const;
 	const int GetHeight()const;
 	void ChangeColor();
+	void Wcolor();
 	//bool IsInside(const Location& loc)const;
 private:
 	//Location Loc;
