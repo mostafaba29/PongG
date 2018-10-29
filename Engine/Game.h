@@ -26,6 +26,7 @@
 #include "Board.h"
 #include "Player.h"
 #include"ball.h"
+#include"Sprites.h"
 #include<random>
 
 class Game
@@ -42,14 +43,21 @@ private:
 	/*  User Functions              */
 	/********************************/
 private:
+	bool p1Collision = false;
+	bool p2Collision = false;
 	MainWindow& wnd;
 	Graphics gfx;
 	std::mt19937 rng;
 	std::random_device rd;
+	std::uniform_int_distribution<int> Direction;
 	Board brd;
 	Player p1;
 	Player p2;
 	ball ball;
+	Sprites s;
+	bool Lost=false;
+	bool GameIsStarted = false;
+	bool GameIsOver = false;
 	/********************************/
 	/*  User Variables              */
 	/********************************/

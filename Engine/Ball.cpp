@@ -3,8 +3,8 @@ ball::ball()
 	:
 	x(400),
 	y(300),
-	vx(1),
-	vy(1)
+	vx(2),
+	vy(2)
 {
 }
 
@@ -37,48 +37,41 @@ void ball::IncreaseSpeed()
 
 void ball::ClambBoard()
 {
-	if ((x+10 > 649) || (x-10 < 151)) {
+	if ((x+10 > 749) || (x-10 < 51)) {
 		vx = 0;
 		vy = 0;
+		lost = true;
 	}
 	if ((y+10 > 549) || (y-10 < 51)) {
 		vy = -vy;
 	}
 }
 
-void ball::Update(int Yc,Player& p)
+void ball::Update(int Yp1, int Yp2,bool p1,bool p2,int r)
 {
-	if (x <= 400) {
-		if (CheckCollision1(p)) {
-			if ((y > Yc - 30) && (y < Yc - 10)) {
+	if (p1 && (GetPosY() > Yp1 - 35) && (GetPosY() < Yp1 + 35)) {
+			/*if (r == 0) {
+				vx = -vx;
 				vy = -vy;
-				vx = -vx;
 			}
-			else if ((y <= Yc + 10) && (y >= Yc - 10)) {
-				vy = 0;
+			else if (r == 1) {
 				vx = -vx;
-			}
-			else if ((y > Yc + 10) && (y < Yc + 30)) {
-				vy = -vy;
-				vx = -vx;
-			}
-		}
+				vy = vy;
+			}*/
+			vx = -vx;
+			vy = -vy;
 	}
-	if (x > 400) {
-		if (CheckCollision2(p)) {
-			if ((y > Yc - 30) && (y < Yc - 10)) {
+	else if (p2 && (GetPosY() > Yp2 - 35) && (GetPosY() < Yp2 + 35)) {
+			/*if (r == 0) {
 				vx = -vx;
 				vy = -vy;
 			}
-			else if ((y <= Yc + 10) && (y >= Yc - 10)) {
+			else if (r == 1) {
 				vx = -vx;
-				vy = 0;
-			}
-			else if ((y > Yc + 10) && (y < Yc + 30)) {
-				vx = -vx;
-				vy = -vy;
-			}
-		}
+				vy = vy;
+			}*/
+			vx = -vx;
+			vy = -vy;
 	}
 	x += vx;
 	y += vy;
@@ -89,12 +82,17 @@ int ball::GetPosY()
 	return y;
 }
 
+bool ball::GetLost() const
+{
+	return lost;
+}
+
 bool ball::CheckCollision1(Player& p)
 {
-	return (x - 10) <= 170;
+	return (x + 10) >= 730;
 }
 
 bool ball::CheckCollision2(Player & p)
 {
-	return (x + 10) >= 630;
+	return (x - 10) <= 71;
 }

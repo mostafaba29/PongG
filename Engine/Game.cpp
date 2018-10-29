@@ -21,12 +21,13 @@
 #include "MainWindow.h"
 #include "Game.h"
 
-Game::Game( MainWindow& wnd )
+Game::Game(MainWindow& wnd)
 	:
-	wnd( wnd ),
-	gfx( wnd ),
+	wnd(wnd),
+	gfx(wnd),
 	brd(gfx),
-	rng(rd())
+	rng(rd()),
+	Direction(0, 1)
 {
 	//ball.Init();
 }
@@ -41,28 +42,49 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
-	ball.Update(p1.GetY(), p1);
-	ball.Update(p2.GetY(), p2);
-	ball.ClambBoard();
-	if (wnd.kbd.KeyIsPressed(VK_UP)) {
-		p1.Move('u');
+	if (!GameIsStarted) {
+		if (wnd.kbd.KeyIsPressed(VK_RETURN)) { GameIsStarted = true; }
 	}
-	if (wnd.kbd.KeyIsPressed(VK_DOWN)) {
-		p1.Move('d');
+	else if (GameIsStarted&&!GameIsOver) {
+		int p1y = p1.GetY();
+		int p2y = p2.GetY();
+		p1Collision = ball.CheckCollision1(p1);
+		p2Collision = ball.CheckCollision2(p2);
+		ball.Update(p1y, p2y, p1Collision, p2Collision, Direction(rng));
+		ball.ClambBoard();
+		if (wnd.kbd.KeyIsPressed(VK_UP)) {
+			p1.Move('u');
+		}
+		if (wnd.kbd.KeyIsPressed(VK_DOWN)) {
+			p1.Move('d');
+		}
+		if (wnd.kbd.KeyIsPressed('W')) {
+			p2.Move('u');
+		}
+		if (wnd.kbd.KeyIsPressed('S')) {
+			p2.Move('d');
+		}
+		Lost = ball.GetLost();
 	}
-	if (wnd.kbd.KeyIsPressed('W')) {
-		p2.Move('u');
-	}
-	if (wnd.kbd.KeyIsPressed('S')) {
-		p2.Move('d');
-	}
+
 }
 
 void Game::ComposeFrame()
 {
-	p1.Draw(Colors::Red, gfx, 630);
-	p2.Draw(Colors::Blue, gfx, 151);
-	ball.Draw(Colors::White, gfx);
-	brd.DrawBorder(150, 50, gfx, Colors::White);
-	
+	if (!GameIsStarted) {
+		s.DrawPressEnter(gfx);
+	}
+	else if (GameIsStarted) {
+		p1.Draw(Colors::Green, gfx, 730);
+		p2.Draw(Colors::Blue, gfx, 51);
+		ball.Draw(Colors::White, gfx);
+		if (Lost) {
+			brd.ChangeColor();
+			GameIsOver = true;
+		}
+		brd.DrawBorder(50, 50, gfx);
+	}
+	else if(GameIsOver){
+		s.DrawGameOver2(gfx);
+	}
 }

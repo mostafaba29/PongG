@@ -6,9 +6,9 @@ Board::Board(Graphics & gfx)
 {
 }
 
-void Board::DrawBorder(int x,int y, Graphics & gfx, Color C)
+void Board::DrawBorder(int x,int y, Graphics & gfx)
 {
-	gfx.DrawRectH(x, y, Width*Dim, Height*Dim, C);
+	gfx.DrawRectH(x, y, Width*Dim, Height*Dim, c);
 }
 
 const int Board::GetWidth() const
@@ -19,6 +19,11 @@ const int Board::GetWidth() const
 const int Board::GetHeight() const
 {
 	return Height;
+}
+
+void Board::ChangeColor()
+{
+	c = Colors::Red;
 }
 
 /*bool Board::IsInside(const Location & loc) const
